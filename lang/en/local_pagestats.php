@@ -15,33 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Callbacks file for local_pagestats plugin
+ * Strings for component 'local_pagestats', language 'en'.
  *
  * @package    local_pagestats
- * @copyright  2017 Damyon Wiese  <damyon@moodle.com>
+ * @copyright  2017 Damyon Wiese
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-function local_pagestats_before_footer() {
-    global $PAGE, $CFG;
-
-    if (isset($CFG->local_pagesta
-
-    $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-
-    $event = \local_pagestats\event\page_viewed::create([
-        'context' => $PAGE->context,
-        'other' => [
-            'url' => $PAGE->url->out(false),
-            'referer' => (new moodle_url($referer))->out(false),
-            'pageregion' => optional_param('frompageregion', '', PARAM_ALPHA)
-        ]
-    ]);
-
-    $event->trigger();
-
- //   $PAGE->requires->js_call_amd('local_pagestats/linkid', 'init', array());
-}
-
+$string['pluginname'] = 'Page statistics logging';
+$string['eventpageviewed'] = 'Page viewed';
