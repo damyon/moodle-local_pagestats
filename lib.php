@@ -27,21 +27,34 @@ defined('MOODLE_INTERNAL') || die();
 function local_pagestats_before_footer() {
     global $PAGE, $CFG;
 
-    if (isset($CFG->local_pagesta
-
     $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+
+    $admin = has_capability('moodle/site:config', $PAGE->context);
+    if (!$admin) {
+        $student = has_capability('moodle/course:isincompletionreports', $PAGE->context);
+    } else {
+        $student = false;
+    }
+    if (!$student && !$admin) {
+        $teacher = has_capability('moodle/grade:viewall', $PAGE->context);
+    } else {
+        $teacher = false;
+    }
 
     $event = \local_pagestats\event\page_viewed::create([
         'context' => $PAGE->context,
         'other' => [
             'url' => $PAGE->url->out(false),
             'referer' => (new moodle_url($referer))->out(false),
-            'pageregion' => optional_param('frompageregion', '', PARAM_ALPHA)
+            'pageregion' => optional_param('frompageregion', '', PARAM_ALPHA),
+            'student' => $student,
+            'teacher' => $teacher,
+            'admin' => $admin,
         ]
     ]);
 
     $event->trigger();
 
- //   $PAGE->requires->js_call_amd('local_pagestats/linkid', 'init', array());
+    $PAGE->requires->js_call_amd('local_pagestats/linkid', 'init', array());
 }
 

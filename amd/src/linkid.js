@@ -33,15 +33,34 @@ define(['jquery'], function($) {
          * @method init
          */
         init: function() {
-            return;
             $('body').on('click', 'a[href]', function(e) {
                 var done = $(e.currentTarget).data('frompageregion');
                 if (!done) {
                     var sep = '&';
-                    if (e.currentTarget.href.indexOf('?') === -1) {
-                        sep = '?';
+                    if (!e.currentTarget.hash) {
+                        if (e.currentTarget.href.indexOf('?') === -1) {
+                            sep = '?';
+                        }
+                        var region = 'unknown', hit;
+                        if ($(e.target).closest('[role=main]').length) {
+                            region = 'main';
+                        }
+                        hit = $(e.target).closest('[data-region]');
+                        if (hit.length) {
+                            region = 'region-' + hit.data('region');
+                        }
+                        hit = $(e.target).closest('[data-block]');
+                        if (hit.length) {
+                            region = 'block-' + hit.data('block');
+                        }
+                        if ($(e.target).closest('[role=banner]').length) {
+                            region = 'banner';
+                        }
+                        if ($(e.target).closest('[role=navigation]').length) {
+                            region = 'navigation';
+                        }
+                        e.currentTarget.search += sep + 'frompageregion=' + region;
                     }
-                    e.currentTarget.search += sep + 'frompageregion=a';
                     $(e.currentTarget).data('frompageregion', true);
                 }
                 return true;

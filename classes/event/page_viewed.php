@@ -64,7 +64,10 @@ class page_viewed extends \core\event\base {
      */
     public function get_description() {
         $url = $this->other['url'];
-        return "The user with id '$this->userid' viewed the page '$url'.";
+        $student = isset($this->other['student']) ? $this->other['student'] : false;
+        $teacher = isset($this->other['teacher']) ? $this->other['teacher'] : false;
+        $admin = isset($this->other['admin']) ? $this->other['admin'] : false;
+        return "The user with id '$this->userid' viewed the page '$url'. Student=$student, Teacher=$teacher, Admin=$admin";
     }
 
     /**
