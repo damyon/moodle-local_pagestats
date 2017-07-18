@@ -15,14 +15,31 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'local_pagestats', language 'en'.
+ * Logging settings.
  *
  * @package    local_pagestats
  * @copyright  2017 Damyon Wiese
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Page statistics logging';
-$string['eventpageviewed'] = 'Page viewed';
-$string['eventenabled'] = 'Trigger page viewed event on every request.';
-$string['jsenabled'] = 'Include page region information in every link.';
+defined('MOODLE_INTERNAL') || die();
+
+if ($hassiteconfig) {
+    $settings = new admin_settingpage('local_pagestats', get_string('pluginname', 'local_pagestats'));
+    $ADMIN->add('logging', $settings);
+
+    $settings->add(new admin_setting_configcheckbox(
+        'local_pagestats/eventenabled',
+        new lang_string('eventenabled', 'local_pagestats'),
+        '',
+        1
+    ));
+
+    $settings->add(new admin_setting_configcheckbox(
+        'local_pagestats/jsenabled',
+        new lang_string('jsenabled', 'local_pagestats'),
+        '',
+        1
+    ));
+}
+
